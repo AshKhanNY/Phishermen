@@ -2,8 +2,8 @@
     "name": "Phishermen",
     "version": "0.1.0",
     "description": "Detecting if current tab is an unsafe phishing site.",
-    "permissions": ["storage", "tabs"],
-    "host_permissions": ["*://*/*"],
+    "permissions": ["storage", "tabs", "scripting"],
+    "host_permissions": ["*://*/*", "http://localhost/*"],
     "background": {
       "service_worker": "background.js"
     },

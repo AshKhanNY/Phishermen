@@ -78,6 +78,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         })
     } else {
         const container = document.getElementsByClassName("container")[0];
-        container.innerHTML = '<div class="title">This is not a YouTube video.</div>'
+        container.innerHTML = '<div class="title">This is not a phishing website.</div>'
     }
 });
