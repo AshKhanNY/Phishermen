@@ -5,7 +5,7 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-@app.route('/detect/', methods=['POST'])
+@app.route('/detect/', methods=['GET'])
 def detect():
     return jsonify({'data' : 'It is now working!'})
 
