@@ -1,6 +1,6 @@
 chrome.tabs.onUpdated.addListener((tabId, tab) => {
   // Get tab url
-  console.log("Website loaded");
+  console.log("Chrome tab updated");
   const urlParameters = new URLSearchParams(tab.url);
 
   // Send url to contentScript
@@ -8,15 +8,22 @@ chrome.tabs.onUpdated.addListener((tabId, tab) => {
     type: "NEW",
     webpage: urlParameters
   });
-
-  // Run injectedScript
-  chrome.scripting.executeScript(
-    {
-      target: {tabId: tabId}, 
-      files: ['injectedScript.js'],
-    },
-    () => {});  
 });
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+      console.log("Chrome tab running");
+      if (request.message == "listeners") {
+        // Run injectedScript
+        chrome.scripting.executeScript(
+          {
+            target: null, // should have tabId 
+            files: ['injectedScript.js'],
+          },
+          () => {});     
+      }
+  }
+);
 
 // // Check to see if current webpage is a YouTube page
 // chrome.tabs.onUpdated.addListener((tabId, tab) => {

@@ -2,11 +2,6 @@
     // Global variables for current webpage
     let currentWebpage = "";
 
-    // Allows us to access controls and player for YT vids
-    let youtubeLeftControls, youtubePlayer;
-    let currentVideo = "";
-    let currentVideoBookmarks = [];
-
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
         const { type, value, webpage } = obj;
 
@@ -31,15 +26,7 @@
         chrome.runtime.sendMessage({message: "listeners"}, function(response) {
         });
     }
-
-    // chrome.runtime.onMessage.addListener((obj, sender, response) => {
-    //     const { type, value, videoId } = obj;
-
-    //     if (type == "NEW") {
-    //         currentVideo = videoId;
-    //         newVideoLoaded();
-    //     }
-    // });
+    // newWebpageLoaded();
 
     // // Grab bookmarks from chrome storage if current video has been bookmarked before
     // const fetchBookmarks = () => {
