@@ -1,83 +1,73 @@
 import { getActiveTabURL } from "./utils.js";
 
-// adding a new bookmark row to the popup
-const addNewBookmark = (bookmarksElement, bookmark) => {
-    const bookmarkTitleElement = document.createElement("div");
-    const newBookmarkElement = document.createElement("div");
+// Adds a new entry to popup, indicating if current page is phishing or not
+const addNewEntry = (entryElement, entry) => {
+    console.log(entry.message)
+    entryElement.textContent = entry.message
 
-    bookmarkTitleElement.textContent = bookmark.desc;
-    bookmarkTitleElement.className = "bookmark-title";
+    // const bookmarkTitleElement = document.createElement("div");
+    // const newBookmarkElement = document.createElement("div");
 
-    newBookmarkElement.id = "bookmark-" + bookmark.time;
-    newBookmarkElement.className = "bookmark";
-    newBookmarkElement.setAttribute("timestamp", bookmark.time);
+    // bookmarkTitleElement.textContent = entry.message;
+    // bookmarkTitleElement.className = "entry-title";
 
-    newBookmarkElement.appendChild(bookmarkTitleElement);
-    bookmarksElement.appendChild(newBookmarkElement);
+    // newBookmarkElement.className = "entry";
+
+    // newBookmarkElement.appendChild(bookmarkTitleElement);
+    // entryElement.appendChild(newBookmarkElement);
 };
 
-const viewBookmarks = (currentBookmarks = []) => {
-    const bookmarksElement = document.getElementById("bookmarks");
-    bookmarksElement.innerHTML = "";
+const viewEntries = (currentEntries = []) => {
+    const entryElement = document.getElementById("body");
 
-    if (currentBookmarks.length > 0) {
-        for (let i = 0; i < currentBookmarks.length; i++) {
-            const bookmark = currentBookmarks[i];
-            addNewBookmark(bookmarksElement, bookmark);
-        } 
+    if (currentEntries.length > 0) {
+        const entry = currentEntries[0];
+        addNewEntry(entryElement, entry);
     } else {
-        bookmarksElement.innerHTML = '<i class="row">No bookmarks to show.</i>';
+        entryElement.textContent = 'Error in processing current webpage.';
     }
 };
 
-const onPlay = async e => {
-    const bookmarkTime = e.target.parentNode.parentNode.getAttribute("timestamp");
-    const activeTab = await getActiveTabURL();
+// const onPlay = async e => {
+//     const bookmarkTime = e.target.parentNode.parentNode.getAttribute("timestamp");
+//     const activeTab = await getActiveTabURL();
   
-    chrome.tabs.sendMessage(activeTab.id, {
-      type: "PLAY",
-      value: bookmarkTime,
-    });
-  };
+//     chrome.tabs.sendMessage(activeTab.id, {
+//       type: "PLAY",
+//       value: bookmarkTime,
+//     });
+//   };
   
-const onDelete = async e => {
-const activeTab = await getActiveTabURL();
-const bookmarkTime = e.target.parentNode.parentNode.getAttribute("timestamp");
-const bookmarkElementToDelete = document.getElementById(
-    "bookmark-" + bookmarkTime
-);
+// const onDelete = async e => {
+// const activeTab = await getActiveTabURL();
+// const bookmarkTime = e.target.parentNode.parentNode.getAttribute("timestamp");
+// const bookmarkElementToDelete = document.getElementById(
+//     "bookmark-" + bookmarkTime
+// );
 
-bookmarkElementToDelete.parentNode.removeChild(bookmarkElementToDelete);
+// bookmarkElementToDelete.parentNode.removeChild(bookmarkElementToDelete);
 
-chrome.tabs.sendMessage(activeTab.id, {
-    type: "DELETE",
-    value: bookmarkTime,
-}, viewBookmarks);
-};
+// chrome.tabs.sendMessage(activeTab.id, {
+//     type: "DELETE",
+//     value: bookmarkTime,
+// }, viewBookmarks);
+// };
 
-const setBookmarkAttributes =  (src, eventListener, controlParentElement) => {
-const controlElement = document.createElement("img");
+// const setBookmarkAttributes =  (src, eventListener, controlParentElement) => {
+// const controlElement = document.createElement("img");
 
-controlElement.src = "assets/" + src + ".png";
-controlElement.title = src;
-controlElement.addEventListener("click", eventListener);
-controlParentElement.appendChild(controlElement);
-};
+// controlElement.src = "assets/" + src + ".png";
+// controlElement.title = src;
+// controlElement.addEventListener("click", eventListener);
+// controlParentElement.appendChild(controlElement);
+// };
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const activeTab = await getActiveTabURL();
-    const queryParameters = activeTab.url.split("?")[1];
-    const urlParameters = new URLSearchParams(queryParameters);
-
-    const currentVideo = urlParameters.get("v");
-    if (activeTab.url.includes("youtube.com/watch") && currentVideo) {
-        chrome.storage.sync.get([currentVideo], (data) => {
-            const currentVideoBookmarks = data[currentVideo] ? JSON.parse(data[currentVideo]) : [];
-
-            viewBookmarks(currentVideoBookmarks);
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        const currentWebpage = tabs[0].url;
+        chrome.storage.sync.get([currentWebpage], (data) => {
+            const currentEntries = data[currentWebpage] ? JSON.parse(data[currentWebpage]) : [];
+            viewEntries(currentEntries);
         })
-    } else {
-        const container = document.getElementsByClassName("container")[0];
-        container.innerHTML = '<div class="title">This is not a phishing website.</div>'
-    }
+     });
 });

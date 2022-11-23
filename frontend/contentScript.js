@@ -1,41 +1,40 @@
 (() => {
     // Global variables for current webpage
     let currentWebpage = "";
+    let result = ""
 
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
-        const { type, value, webpage } = obj;
+        const { type, message, site } = obj;
 
         if (type === "NEW") {
-            currentWebpage = webpage;
+            currentWebpage = site;
+            result = message;
             newWebpageLoaded();
         }
     });
 
-    // var temp_btn = document.createElement('a');
-    // temp_btn.id = "temp_btn";
-    // temp_btn.appendChild(document.createTextNode("Flask Server Checker"));
-
-
-    // document.getElementById('temp_btn').onclick = function(){
-    //     chrome.runtime.sendMessage({message: "listeners"}, function(response) {
-    //     });
-    // }
-
-    // Upon loading new webpage, send message to background.js to run Python script
+    // Upon loading new webpage, update extension to display if
+    // current webpage is a phishing site or not.
+    // TODO: Potentially change current site's DOM?
     const newWebpageLoaded = async () => {
-        chrome.runtime.sendMessage({message: "listeners"}, function(response) {
+        const newEntry = {
+            message: result,
+        };
+        currentEntries = await fetchEntries();
+        chrome.storage.sync.set({
+            [currentWebpage]: JSON.stringify([...currentEntries, newEntry].sort((a, b) => a.time - b.time))
         });
     }
-    // newWebpageLoaded();
+    newWebpageLoaded();
 
-    // // Grab bookmarks from chrome storage if current video has been bookmarked before
-    // const fetchBookmarks = () => {
-    //     return new Promise((resolve) => {
-    //         chrome.storage.sync.get([currentVideo], (obj) => {
-    //             resolve(obj[currentVideo] ? JSON.parse(obj[currentVideo]) : []);
-    //         });
-    //     });
-    // };
+    // Grab bookmarks from chrome storage if current video has been bookmarked before
+    const fetchEntries = () => {
+        return new Promise((resolve) => {
+            chrome.storage.sync.get([currentWebpage], (obj) => {
+                resolve(obj[currentWebpage] ? JSON.parse(obj[currentWebpage]) : []);
+            });
+        });
+    };
 
     // // Loads a new video and populates it w/ a button if it doesn't already have it
     // const newVideoLoaded = async () => {
