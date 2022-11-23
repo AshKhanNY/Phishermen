@@ -12,21 +12,19 @@ def detect():
     if request.method == 'POST':
         data = request.get_json()
         url = data['url']
-        # print(url)
         message = {'message':'Default'}
+        print(predictor.check_phishing(url))
         if (predictor.check_phishing(url)): 
             message = {'message':'This is a safe site.',
                        'site': url}
         else:
             message = {'message':'This is NOT safe site.',
                        'site': url}
-        print(predictor.check_phishing(url))
         return jsonify(message)
     # GET request
     else:
         message = {'message':'This is a locally hosted site!'}
         return jsonify(message)
-
 
 if __name__ == "__main__":
     app.run(debug=True)

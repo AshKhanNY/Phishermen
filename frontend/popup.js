@@ -1,30 +1,43 @@
 import { getActiveTabURL } from "./utils.js";
 
 // Adds a new entry to popup, indicating if current page is phishing or not
-const addNewEntry = (entryElement, entry) => {
-    console.log(entry.message)
-    entryElement.textContent = entry.message
+const addNewEntry = async (entryElement, entry) => {
+    // console.log(entry.message)
+    // console.log(activeTab.url);
+    const message = entry.message;
+    const activeTab = await getActiveTabURL();
+    const url = activeTab.url;
+    
+    const body = document.createElement("div");
+    body.className = "body";
+    body.textContent = message;
 
-    // const bookmarkTitleElement = document.createElement("div");
-    // const newBookmarkElement = document.createElement("div");
+    const subbody = document.createElement("div");
+    subbody.className = "subbody";
+    subbody.innerHTML = "Website: " + url + "<br/>";
 
-    // bookmarkTitleElement.textContent = entry.message;
-    // bookmarkTitleElement.className = "entry-title";
+    const icon = document.createElement("div");
+    const iconImage = document.createElement("img");
+    var src = message.includes("NOT") ? 'unsafe' : 'safe';
+    iconImage.src = "assets/" + src + ".png";
+    iconImage.style = "width: 200px; padding: 20px 0 0 40px; text-align: center;";
+    icon.title = src;
+    icon.appendChild(iconImage);
 
-    // newBookmarkElement.className = "entry";
-
-    // newBookmarkElement.appendChild(bookmarkTitleElement);
-    // entryElement.appendChild(newBookmarkElement);
+    entryElement.appendChild(body);
+    entryElement.appendChild(subbody);
+    entryElement.appendChild(icon);
 };
 
 const viewEntries = (currentEntries = []) => {
-    const entryElement = document.getElementById("body");
+    const entryElement = document.getElementsByClassName("main_body")[0];
+    entryElement.innerHTML = "";
 
     if (currentEntries.length > 0) {
-        const entry = currentEntries[0];
+        const entry = currentEntries[0]; // will take in the most recent entry
         addNewEntry(entryElement, entry);
     } else {
-        entryElement.textContent = 'Error in processing current webpage.';
+        entryElement.innerHTML = "<div class='subbody'>Error in processing current webpage.</div>"
     }
 };
 

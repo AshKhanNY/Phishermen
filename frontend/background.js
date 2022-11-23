@@ -1,6 +1,5 @@
 chrome.tabs.onUpdated.addListener((tabId, tab) => {
   console.log("Chrome tab running");
-  // TODO (ASH) get out the url
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       var weburl = tabs[0].url;
       console.log(weburl);

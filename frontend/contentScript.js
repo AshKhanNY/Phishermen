@@ -15,19 +15,33 @@
 
     // Upon loading new webpage, update extension to display if
     // current webpage is a phishing site or not.
-    // TODO: Potentially change current site's DOM?
     const newWebpageLoaded = async () => {
         const newEntry = {
+            site: currentWebpage,
             message: result,
         };
         currentEntries = await fetchEntries();
         chrome.storage.sync.set({
             [currentWebpage]: JSON.stringify([...currentEntries, newEntry].sort((a, b) => a.time - b.time))
         });
-    }
-    newWebpageLoaded();
 
-    // Grab bookmarks from chrome storage if current video has been bookmarked before
+        if (result.includes("NOT")){
+            // Create "banner" to display on very top of webpage
+            var newSpan = document.createElement("newSpan");
+            newSpan.id = "newSpan";
+            newSpan.style.fontSize = "18px";
+            newSpan.style.fontWeight = "bold";
+            newSpan.textContent = "*Warning: This site can potentially be harmful*"
+            newSpan.style.color = "red";
+            var elemDiv = document.createElement('div');
+            elemDiv.style.cssText = 'width:100%;height:10%;background-image:linear-gradient(to right top, #9800b9, #655ce5, #0087fc, #00a8ff, #00c5fb);text-align: center;';
+            elemDiv.appendChild(newSpan);
+            window.document.body.insertBefore(elemDiv, window.document.body.firstChild);
+        }
+    }
+    // newWebpageLoaded();
+
+    // Grab webpages from chrome storage if current page has been checked before
     const fetchEntries = () => {
         return new Promise((resolve) => {
             chrome.storage.sync.get([currentWebpage], (obj) => {
@@ -58,28 +72,5 @@
     //         bookmarkBtn.addEventListener("click", addNewBookmarkEventHandler);
     //     }
     // }
-
-    // // Handles the current timestamp of a video
-    // const addNewBookmarkEventHandler = async () => {
-    //     const currentTime = youtubePlayer.currentTime;
-    //     const newBookmark = {
-    //         time: currentTime,
-    //         desc: "Bookmark at " + getTime(currentTime),
-    //     };
-
-    //     currentVideoBookmarks = await fetchBookmarks();
-        
-    //     chrome.storage.sync.set({
-    //         [currentVideo]: JSON.stringify([...currentVideoBookmarks, newBookmark].sort((a, b) => a.time - b.time))
-    //     });
-    // }
-
     // newVideoLoaded();
 })();
-
-const getTime = t => {
-    var date = new Date(0);
-    date.setSeconds(t);
-
-    return date.toISOString().substr(11, 8);
-}
