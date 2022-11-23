@@ -14,13 +14,20 @@ chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
       console.log("Chrome tab running");
       if (request.message == "listeners") {
-        // Run injectedScript
-        chrome.scripting.executeScript(
-          {
-            target: null, // should have tabId 
-            files: ['injectedScript.js'],
-          },
-          () => {});     
+          
+          // TODO (ASH) get out the url
+          chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+            let url = tabs[0].url;
+          });
+          // const url_encoed = b64_encode(url)
+          // TODO(ASH) Understand the difference between GET and POST
+          // If you use GET you need to encode the url as something (usually we use base 64)
+          // If you use POST you an insert the url or other data directly in POST fields
+          console.log(url)
+          fetch('http://127.0.0.1:5000/detect').then(r => r.text()).then(result => {
+            console.log()
+            console.log(result)
+        }) 
       }
   }
 );
