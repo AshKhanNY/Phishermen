@@ -2,6 +2,14 @@
     // Global variables for current webpage
     let currentWebpage = "";
     let result = ""
+    let toggle = 0
+
+    // chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    //     const { checkbox } = message;
+    //     if (checkbox) {
+    //         document.getElementById('body').style.display = checkbox ? 'none': 'block';
+    //     }
+    // });
 
     chrome.runtime.onMessage.addListener((obj, sender, response) => {
         const { type, message, site } = obj;
@@ -9,7 +17,10 @@
         if (type === "NEW") {
             currentWebpage = site;
             result = message;
-            newWebpageLoaded();
+            if (toggle == 0){
+                newWebpageLoaded();
+                toggle = 1;
+            }
         }
     });
 
@@ -32,9 +43,9 @@
             newSpan.style.fontSize = "18px";
             newSpan.style.fontWeight = "bold";
             newSpan.textContent = "*Warning: This site can potentially be harmful*"
-            newSpan.style.color = "red";
+            newSpan.style.color = "white";
             var elemDiv = document.createElement('div');
-            elemDiv.style.cssText = 'width:100%;height:10%;background-image:linear-gradient(to right top, #9800b9, #655ce5, #0087fc, #00a8ff, #00c5fb);text-align: center;';
+            elemDiv.style.cssText = 'width:100%;height:20%;background-color: coral; text-align: center;';
             elemDiv.appendChild(newSpan);
             window.document.body.insertBefore(elemDiv, window.document.body.firstChild);
         }
@@ -49,28 +60,4 @@
             });
         });
     };
-
-    // // Loads a new video and populates it w/ a button if it doesn't already have it
-    // const newVideoLoaded = async () => {
-    //     const bookmarkBtnExists = document.getElementsByClassName("bookmark-btn")[0];
-    //     currentVideoBookmarks = await fetchBookmarks();
-
-    //     if (!bookmarkBtnExists) {
-    //         // Load bookmark button
-    //         const bookmarkBtn = document.createElement("img");
-    //         bookmarkBtn.src = chrome.runtime.getURL("assets/bookmark.png");
-    //         bookmarkBtn.className = "ytp-button " + "bookmark-btn";
-    //         bookmarkBtn.title = "Click to bookmark current timestamp";
-
-    //         // 20:00 mark on CodeAcademy video shows how you can grab elements by class or ID and
-    //         // make changes to the HTML via JS
-    //         youtubeLeftControls = document.getElementsByClassName("ytp-left-controls")[0];
-    //         youtubePlayer = document.getElementsByClassName("video-stream")[0];
-
-    //         // Appends bookmark element into row of YouTube controls
-    //         youtubeLeftControls.appendChild(bookmarkBtn);
-    //         bookmarkBtn.addEventListener("click", addNewBookmarkEventHandler);
-    //     }
-    // }
-    // newVideoLoaded();
 })();

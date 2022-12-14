@@ -1,5 +1,17 @@
 import { getActiveTabURL } from "./utils.js";
 
+// const checkbox = document.querySelector("input[name=checkbox]");
+// checkbox.addEventListener('change', (event) => {
+//     const { checked } = event.target;
+//     toggleContent(checked);
+// });
+
+// const toggleContent = (checked) => {
+//     chrome.runtime.sendMessage({"checkbox": checked}, (response) => {
+//         console.log(`Checkbox is turned ${checked ? 'on' : 'off'}`)
+//     });
+// };
+
 // Adds a new entry to popup, indicating if current page is phishing or not
 const addNewEntry = async (entryElement, entry) => {
     // console.log(entry.message)
@@ -40,40 +52,6 @@ const viewEntries = (currentEntries = []) => {
         entryElement.innerHTML = "<div class='subbody'>Error in processing current webpage.</div>"
     }
 };
-
-// const onPlay = async e => {
-//     const bookmarkTime = e.target.parentNode.parentNode.getAttribute("timestamp");
-//     const activeTab = await getActiveTabURL();
-  
-//     chrome.tabs.sendMessage(activeTab.id, {
-//       type: "PLAY",
-//       value: bookmarkTime,
-//     });
-//   };
-  
-// const onDelete = async e => {
-// const activeTab = await getActiveTabURL();
-// const bookmarkTime = e.target.parentNode.parentNode.getAttribute("timestamp");
-// const bookmarkElementToDelete = document.getElementById(
-//     "bookmark-" + bookmarkTime
-// );
-
-// bookmarkElementToDelete.parentNode.removeChild(bookmarkElementToDelete);
-
-// chrome.tabs.sendMessage(activeTab.id, {
-//     type: "DELETE",
-//     value: bookmarkTime,
-// }, viewBookmarks);
-// };
-
-// const setBookmarkAttributes =  (src, eventListener, controlParentElement) => {
-// const controlElement = document.createElement("img");
-
-// controlElement.src = "assets/" + src + ".png";
-// controlElement.title = src;
-// controlElement.addEventListener("click", eventListener);
-// controlParentElement.appendChild(controlElement);
-// };
 
 document.addEventListener("DOMContentLoaded", async () => {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
