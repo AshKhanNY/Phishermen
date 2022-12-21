@@ -8,23 +8,21 @@ This is a Google Chrome extension that will run in the background and detect if 
 
 ## Table of Contents
 
-- [Phishermen](#phishermen)
-  * [Table of Contents](#table-of-contents)
-  * [Overall Descriptions](#overall-descriptions)
-    + [Description](#description)
-    + [Purpose](#purpose)
-    + [What It Does](#what-it-does)
-  * [Design and Experiment Details](#design-and-experiment-details)
-    + [Software Tech Stack](#software-tech-stack)
-    + [ML Model Design](#ml-model-design)
-    + [ML Dataset Description](#ml-dataset-description)
-    + [ML Model Experimental Performance](#ml-model-experimental-performance)
-    + [User Interface Design](#user-interface-design)
-  * [Description of the Code Organization](#description-of-the-code-organization)
-  * [Instructions on How to Run](#instructions-on-how-to-run)
-  * [Instructions on How to Train the Models](#instructions-on-how-to-train-the-models)
-  * [Challenges Faced](#challenges-faced)
-  * [Future Work](#future-work)
+- [Overall Descriptions](#overall-descriptions)
+  * [Description](#description)
+  * [Purpose](#purpose)
+  * [What It Does](#what-it-does)
+- [Design and Experiment Details](#design-and-experiment-details)
+  * [Software Tech Stack](#software-tech-stack)
+  * [ML Model Design](#ml-model-design)
+  * [ML Dataset Description](#ml-dataset-description)
+  * [ML Model Experimental Performance](#ml-model-experimental-performance)
+  * [User Interface Design](#user-interface-design)
+- [Description of the Code Organization](#description-of-the-code-organization)
+- [Instructions on How to Run](#instructions-on-how-to-run)
+- [Instructions on How to Train the Models](#instructions-on-how-to-train-the-models)
+- [Challenges Faced](#challenges-faced)
+- [Future Work](#future-work)
 
 ## Overall Descriptions
 ### Description
